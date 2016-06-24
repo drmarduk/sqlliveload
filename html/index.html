@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test</title>
+	</head>
+	<body>
+		<form method="post" action="/query">
+			Suche <input type="text" name="query" id="query" oninput="search()" />
+		</form>
+
+		<br>
+		Ergebnis:
+		<ul id="result">
+		
+		</ul>
+
+
+		<script>
+			function search() {
+				var q = document.getElementById("query").value;
+				get(q);
+			}
+			function get(query) {
+				var http = new XMLHttpRequest();
+
+				http.onreadystatechange = function() {
+					if(http.readyState == XMLHttpRequest.DONE) {
+						if(http.status == 200) {
+							// do stuff
+							var list = document.getElementById("result");
+							list.innerHTML = "";
+
+							var src = http.responseText;
+							var files = src.split('\n');
+
+							for(var i = 0; i < files.length; i++) {
+								var li = document.createElement("li");
+								li.appendChild(document.createTextNode(files[i]));
+								list.appendChild(li);
+							}
+
+						} else {
+							alert("something went wrong");
+						}
+					}
+				};
+
+				http.open("GET", "/query?query=" + query, true);
+				http.send();
+			}
+
+		</script>
+	</body>
+</html>
