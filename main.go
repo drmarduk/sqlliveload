@@ -52,7 +52,7 @@ func QueryHandler(w http.ResponseWriter, r *http.Request) {
 
 func queryDb(q string) ([]string, error) {
 
-	query := "select name from files where instr(name, ?) limit 0, 2000;"
+	query := "select path || '/' || name from files where instr(name, ?) limit 0, 2000;"
 	rows, err := db.Query(query, q)
 	if err != nil {
 		panic(err)
